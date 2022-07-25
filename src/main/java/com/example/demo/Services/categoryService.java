@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.Services;
 
 import com.example.demo.Exception.IdNotFoundException;
 import com.example.demo.Models.Category;

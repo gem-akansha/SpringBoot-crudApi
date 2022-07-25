@@ -14,6 +14,7 @@ public class Category {
     @Column
     private String categoryName;
     @Column
+
     private String categoryDescription;
     @Column
     @JsonFormat(pattern = "dd-MM-yyyy")

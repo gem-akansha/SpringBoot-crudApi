@@ -7,6 +7,7 @@ public class IdNotFoundException extends RuntimeException{
         super(msg);
         this.message = msg;
     }
+
     public IdNotFoundException(){
 
     }

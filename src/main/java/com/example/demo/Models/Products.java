@@ -20,6 +20,7 @@ public class Products {
     private Integer price;
     @Column
     private Integer categoryId;
+
     @Column
     //@Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")

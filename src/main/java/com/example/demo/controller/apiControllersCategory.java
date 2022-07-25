@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.Models.Category;
-import com.example.demo.services.categoryInter;
+import com.example.demo.Services.categoryInter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

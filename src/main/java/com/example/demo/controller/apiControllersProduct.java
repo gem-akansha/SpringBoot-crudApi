@@ -1,18 +1,20 @@
 package com.example.demo.controller;
 
-import com.example.demo.Exception.IdNotFoundException;
 import com.example.demo.Models.Products;
-import com.example.demo.services.productInter;
+import com.example.demo.Services.productInter;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @RestController
+@EnableSwagger2
+@Api(tags = {"Product Service"}, description = "test")
+
 public class apiControllersProduct {
 
     @Autowired

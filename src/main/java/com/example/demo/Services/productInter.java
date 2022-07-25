@@ -1,8 +1,6 @@
-package com.example.demo.services;
+package com.example.demo.Services;
 
 import com.example.demo.Models.Products;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 

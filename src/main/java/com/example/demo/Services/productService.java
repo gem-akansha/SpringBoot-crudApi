@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.Services;
 
 import com.example.demo.Exception.IdNotFoundException;
 import com.example.demo.Models.Products;
@@ -9,12 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
-
-import static javax.persistence.TemporalType.DATE;
 
 
 @Service
@@ -58,7 +54,7 @@ public class productService implements productInter {
     public String updateProduct(Integer id, Products product) throws IdNotFoundException{
 
         if( ProductRepo.findById(id).isEmpty()){
-            log.error("Id not found exception");
+            log.error("Cannot update product details... product doesnt exist with given id",id);
             throw new IdNotFoundException();
         }
         else{
