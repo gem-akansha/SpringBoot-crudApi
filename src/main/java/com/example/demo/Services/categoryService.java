@@ -42,7 +42,7 @@ public class categoryService implements categoryInter{
     }
 
     @Override
-    public String updateCategory(Integer id, Category category) throws IdNotFoundException {
+    public Category updateCategory(Integer id, Category category) throws IdNotFoundException {
         if(CategoryRepo.findById(id).isEmpty()){
             log.error("Id not found exception");
             throw new IdNotFoundException();
@@ -57,7 +57,7 @@ public class categoryService implements categoryInter{
             updatedCategory.setDeleted(category.getDeleted());
             CategoryRepo.save(updatedCategory);
             log.info("Product Updated");
-            return "Updated Successfully...";
+            return updatedCategory;
         }
 
     }
@@ -70,7 +70,7 @@ public class categoryService implements categoryInter{
         }
         else {
             Category category = CategoryRepo.findById(id).get();
-            CategoryRepo.delete(category);
+            CategoryRepo.deleteById(category.getCategoryId());
             log.info("Category Deleted");
             return "Category is deleted with id :" + id;
         }
@@ -79,20 +79,10 @@ public class categoryService implements categoryInter{
 
 
     @Override
-    public String saveCategory(Category category) {
-        CategoryRepo.save(category);
+    public Category saveCategory(Category category) {
+        Category savedCategory = CategoryRepo.save(category);
         log.info("Adding new product to table");
-        return "Saved...";
+        return savedCategory;
     }
-
-
-
-
-
-
-
-
-
-
 
 }

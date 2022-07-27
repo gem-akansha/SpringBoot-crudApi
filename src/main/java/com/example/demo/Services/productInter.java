@@ -8,8 +8,8 @@ public interface productInter {
     public List<Products> getProduct();
     public Products getOneProduct( Integer id);
     public String saveProduct(Products product);
-    public String updateProduct(Integer id,Products product);
+    public Products updateProduct(Integer id,Products product);
     public String deleteProduct(Integer id);
 
-    public String updateSelectedProduct(Integer id, Products product);
+   // public String updateSelectedProduct(Integer id, Products product);
 }

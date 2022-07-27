@@ -51,7 +51,7 @@ public class productService implements productInter {
     }
 
     @Override
-    public String updateProduct(Integer id, Products product) throws IdNotFoundException{
+    public Products updateProduct(Integer id, Products product) throws IdNotFoundException{
 
         if( ProductRepo.findById(id).isEmpty()){
             log.error("Cannot update product details... product doesnt exist with given id",id);
@@ -71,7 +71,7 @@ public class productService implements productInter {
             updatedProduct.setDeleted(product.getDeleted());
             ProductRepo.save(updatedProduct);
             log.info("Product Updated");
-            return "Updated Successfully";
+            return updatedProduct;
         }
     }
 
@@ -93,25 +93,25 @@ public class productService implements productInter {
 
     }
 
-    @Override
-    public String updateSelectedProduct(Integer id, Products product) throws IdNotFoundException{
-        if(ProductRepo.findById(id).isEmpty()){
-            throw new IdNotFoundException();
-        }
-        else {
-            Products UpdateSelectedProduct = ProductRepo.findById(id).get();
-            UpdateSelectedProduct.setProductName(product.getProductName());
-            UpdateSelectedProduct.setProductDescription(product.getProductDescription());
-            UpdateSelectedProduct.setPrice(product.getPrice());
-            //updatedProduct.setCreateDate(product.getCreateDate());
-
-            UpdateSelectedProduct.setUpdateDate(new Date(System.currentTimeMillis()));
-            //updatedProduct.setUpdateDate(product.getUpdateDate());
-            UpdateSelectedProduct.setActive(product.getActive());
-            UpdateSelectedProduct.setDeleted(product.getDeleted());
-            ProductRepo.save(UpdateSelectedProduct);
-            return "Updated Successfully";
-        }
-
-    }
+//    @Override
+//    public String updateSelectedProduct(Integer id, Products product) throws IdNotFoundException{
+//        if(ProductRepo.findById(id).isEmpty()){
+//            throw new IdNotFoundException();
+//        }
+//        else {
+//            Products UpdateSelectedProduct = ProductRepo.findById(id).get();
+//            UpdateSelectedProduct.setProductName(product.getProductName());
+//            UpdateSelectedProduct.setProductDescription(product.getProductDescription());
+//            UpdateSelectedProduct.setPrice(product.getPrice());
+//            //updatedProduct.setCreateDate(product.getCreateDate());
+//
+//            UpdateSelectedProduct.setUpdateDate(new Date(System.currentTimeMillis()));
+//            //updatedProduct.setUpdateDate(product.getUpdateDate());
+//            UpdateSelectedProduct.setActive(product.getActive());
+//            UpdateSelectedProduct.setDeleted(product.getDeleted());
+//            ProductRepo.save(UpdateSelectedProduct);
+//            return "Updated Successfully";
+//        }
+//
+//    }
 }

@@ -37,7 +37,7 @@ public class apiControllersCategory {
 
     @PostMapping(value = "/category")
     @Operation(summary = "Save Category", description = "Save category")
-    public String saveCategory(@RequestBody Category category){
+    public Category saveCategory(@RequestBody Category category){
         return CategoryInter.saveCategory(category);
     }
 

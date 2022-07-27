@@ -91,15 +91,12 @@ public class Category {
 
 
 
+
   //constructor
-    public Category(Integer categoryId, String categoryName, String categoryDescription, Date createDate, Date updateDate, boolean isActive, boolean isDeleted) {
-        this.categoryId = categoryId;
+    public Category(Integer id,String categoryName, String categoryDescription ) {
+         this.categoryId = id;
         this.categoryName = categoryName;
         this.categoryDescription = categoryDescription;
-        this.createDate = createDate;
-        this.updateDate = updateDate;
-        this.isActive = isActive;
-        this.isDeleted = isDeleted;
     }
 
 
@@ -109,17 +106,5 @@ public class Category {
     }
 
 
-    //tostring method
-    @Override
-    public String toString() {
-        return "Category{" +
-                "categoryId=" + categoryId +
-                ", categoryName='" + categoryName + '\'' +
-                ", categoryDescription='" + categoryDescription + '\'' +
-                ", createDate=" + createDate +
-                ", updateDate=" + updateDate +
-                ", isActive=" + isActive +
-                ", isDeleted=" + isDeleted +
-                '}';
-    }
+
 }
