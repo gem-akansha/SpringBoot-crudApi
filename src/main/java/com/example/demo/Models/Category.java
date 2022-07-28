@@ -99,10 +99,15 @@ public class Category {
         this.categoryDescription = categoryDescription;
     }
 
+    public Category(String categoryName, String categoryDescription ) {
+
+        this.categoryName = categoryName;
+        this.categoryDescription = categoryDescription;
+    }
 
     //default constructor
     public Category() {
-        super();
+
     }
 
 

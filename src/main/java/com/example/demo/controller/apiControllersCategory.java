@@ -21,14 +21,17 @@ public class apiControllersCategory {
 
     @GetMapping(value = "/category")
     @Operation(summary = "Get Category", description = "Get list of all category")
-    public List<Category> getCategory(){
-        return CategoryInter.getCategory();
+    public ResponseEntity<?> getCategory(){
+        try{
+            return new ResponseEntity<>(CategoryInter.getCategory(),HttpStatus.FOUND);
+        }
+        catch (Exception e){
+             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 
     @GetMapping(value = "/category/{id}")
-//    @Operation(@ExternalDocumentation="")
-//    @ExternalDocumentation("hii")
     @Operation(summary = "Get category by id", description = "Get category of given id")
     public ResponseEntity getOneCategory(@PathVariable Integer id){
         return new ResponseEntity(CategoryInter.getOneCategory(id), HttpStatus.OK);
@@ -37,8 +40,13 @@ public class apiControllersCategory {
 
     @PostMapping(value = "/category")
     @Operation(summary = "Save Category", description = "Save category")
-    public Category saveCategory(@RequestBody Category category){
-        return CategoryInter.saveCategory(category);
+    public ResponseEntity<?> saveCategory(@RequestBody Category category){
+        try{
+            return new ResponseEntity<>(CategoryInter.saveCategory(category),HttpStatus.CREATED);
+        }
+       catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+       }
     }
 
 

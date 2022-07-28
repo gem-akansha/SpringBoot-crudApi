@@ -107,6 +107,9 @@ public class Products {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
+    public Products(){
+
+    }
 
     public Products(Integer productId,String productName,String productDescription,Integer price,Integer categoryId){
         this.productId = productId;

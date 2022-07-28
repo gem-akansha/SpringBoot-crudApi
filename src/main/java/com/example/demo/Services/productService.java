@@ -88,7 +88,7 @@ public class productService implements productInter {
             log.info("Product Deleted");
 
             //ProductRepo.deleteById(id);
-            return"User is deleted with id "+ id;
+            return"Product Deleted";
         }
 
     }

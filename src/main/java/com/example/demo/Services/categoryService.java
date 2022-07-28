@@ -72,7 +72,7 @@ public class categoryService implements categoryInter{
             Category category = CategoryRepo.findById(id).get();
             CategoryRepo.deleteById(category.getCategoryId());
             log.info("Category Deleted");
-            return "Category is deleted with id :" + id;
+            return "Category Deleted";
         }
 
     }

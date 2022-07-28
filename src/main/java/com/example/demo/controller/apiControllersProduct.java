@@ -63,7 +63,7 @@ public class apiControllersProduct {
 //            return new ResponseEntity<>("NOT found",HttpStatus.INTERNAL_SERVER_ERROR);
 //        }
 
-                return new ResponseEntity<>(ProductInter.getOneProduct(id), HttpStatus.OK);
+                return new ResponseEntity<>(ProductInter.getOneProduct(id), HttpStatus.FOUND);
 
 
         }
@@ -81,8 +81,13 @@ public class apiControllersProduct {
 
     @PostMapping(value = "/products")
     @Operation(summary = "Save Product", description = "Save product")
-    public String saveProduct(@RequestBody Products product){
-        return ProductInter.saveProduct(product);
+    public ResponseEntity saveProduct(@RequestBody Products product){
+       try{
+           return new ResponseEntity<>(ProductInter.saveProduct(product),HttpStatus.OK);
+       }
+       catch (Exception e){
+           return new ResponseEntity<>(HttpStatus.CONFLICT);
+       }
     }
 
     @PutMapping(value = "/products/{id}")
