@@ -94,6 +94,14 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+
+<!--		<dependency>-->
+<!--			<groupId>org.apache.maven.doxia</groupId>-->
+<!--			<artifactId>doxia-site-renderer</artifactId>-->
+<!--			<version>1.8.1</version>-->
+<!--		</dependency>-->
+
 	</dependencies>
 
 	<build>
@@ -118,7 +126,33 @@
 <!--					<target>18</target>-->
 <!--				</configuration>-->
 <!--			</plugin>-->
+
+			<!--CheckStylePlugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.7.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.2.2</version>
+			</plugin>
+
 		</plugins>
 	</build>
+<!--	   </reporting>  -->
+<reporting>
+<plugins>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-checkstyle-plugin</artifactId>
+		<version>3.0.0</version>
+		<configuration>
+			<configLocation>src/main/resources/checkstyle.xml</configLocation>
+		</configuration>
+	</plugin>
+</plugins>
+</reporting>
 
 </project>

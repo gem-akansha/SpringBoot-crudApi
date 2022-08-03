@@ -4,7 +4,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.*;
+//import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -23,14 +29,16 @@ public class Products {
 
     @Column
     //@Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
    // @CreatedDate
    // private Date createDate;
-    private Date createDate = new Date(System.currentTimeMillis());
+    //private Date createDate = new Date(System.currentTimeMillis());
+    private LocalDate createDate= LocalDate.now();
     @Column
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
   //  @CreatedDate
-    private  Date updateDate = new Date(System.currentTimeMillis());
+   // private  Date updateDate = new Date(System.currentTimeMillis());
+    private LocalDate updateDate= LocalDate.now();
     @Column
     private boolean isActive = true;
     @Column
@@ -76,19 +84,19 @@ public class Products {
         this.categoryId = categoryId;
     }
 
-    public Date getCreateDate() {
+    public LocalDate getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(LocalDate createDate) {
         this.createDate = createDate;
     }
 
-    public Date getUpdateDate() {
+    public LocalDate getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Date updateDate) {
+    public void setUpdateDate(LocalDate updateDate) {
         this.updateDate = updateDate;
     }
 

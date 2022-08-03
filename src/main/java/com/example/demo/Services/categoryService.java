@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class categoryService implements categoryInter{
+public class categoryService implements categoryInter {
     @Autowired
     public categoryRepo CategoryRepo;
 

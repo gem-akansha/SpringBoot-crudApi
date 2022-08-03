@@ -9,12 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 
 @Service
-public class productService implements productInter {
+public class ProductService implements ProductInter {
 
     @Autowired
     public productRepo ProductRepo;
@@ -59,20 +60,45 @@ public class productService implements productInter {
         }
         else{
             Products updatedProduct = ProductRepo.findById(id).get();
-            updatedProduct.setCategoryId(product.getCategoryId());
+           // updatedProduct.setCategoryId(product.getCategoryId());
             updatedProduct.setProductName(product.getProductName());
             updatedProduct.setProductDescription(product.getProductDescription());
             updatedProduct.setPrice(product.getPrice());
             //updatedProduct.setCreateDate(product.getCreateDate());
 
-            updatedProduct.setUpdateDate(new Date(System.currentTimeMillis()));
+            updatedProduct.setUpdateDate(LocalDate.now()
+                  //  new Date(System.currentTimeMillis())
+            );
             //updatedProduct.setUpdateDate(product.getUpdateDate());
-            updatedProduct.setActive(product.getActive());
-            updatedProduct.setDeleted(product.getDeleted());
+            //updatedProduct.setActive(product.getActive());
+            //updatedProduct.setDeleted(product.getDeleted());
             ProductRepo.save(updatedProduct);
             log.info("Product Updated");
             return updatedProduct;
         }
+
+
+
+
+
+//        public Product updateProduct(Product product, int productId) throws ResourceNotFoundException {
+//            Product update;
+//            if (productDao.findById(productId).isPresent()) {
+//                update = productDao.findById(productId).get();
+//                update.setProductName(product.getProductName());
+//                update.setProductDescription(product.getProductDescription());
+//                update.setPrice(product.getPrice());
+//                // update.setCreateDate(product.getCreateDate());updateDate=new Date(System.currentTimeMillis());
+//                Date date = new Date(System.currentTimeMillis());
+//                update.setUpdateDate(date);
+//                update.setActive(product.isActive());
+//                update.setDeleted(product.isDeleted());
+//                productDao.save(update);
+//            } else {
+//                throw new ResourceNotFoundException();
+//            }
+//            return update;
+//        }
     }
 
 
@@ -91,6 +117,35 @@ public class productService implements productInter {
             return"Product Deleted";
         }
 
+    }
+
+    @Override
+    public List<Products> getProduct_A() {
+        return ProductRepo.getProducts_A();
+    }
+
+    @Override
+    public Products updateName(Integer id,String name) {
+        if(ProductRepo.findById(id).isEmpty()){
+            log.error("Id not found exception");
+            throw new IdNotFoundException();
+        }
+        else {
+
+            log.info("tewst log");
+             ProductRepo.update(name,id);
+//            ProductRepo.demo(id);
+             log.info("Here");
+             Products products = ProductRepo.findById(id).get();
+            System.out.println(products.getProductName());
+             return products;
+        }
+    }
+
+    @Override
+    public String softDelete(Integer id) {
+        ProductRepo.soft_delete(id);
+        return "Deleted";
     }
 
 //    @Override

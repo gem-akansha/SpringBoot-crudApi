@@ -24,7 +24,7 @@ class productServiceTest {
     productRepo ProductRepo;
 
     @InjectMocks
-    productService ProductService;
+    com.example.demo.Services.ProductService ProductService;
 
     @Test
     @Order(1)

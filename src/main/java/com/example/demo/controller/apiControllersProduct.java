@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.Models.Products;
-import com.example.demo.Services.productInter;
 //import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,8 +9,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.*;
 //import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 
 
 @RestController
@@ -22,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class apiControllersProduct {
 
     @Autowired
-    private productInter ProductInter;
+    private com.example.demo.Services.ProductInter ProductInter;
 
     Logger log = LoggerFactory.getLogger(apiControllersProduct.class);
 
@@ -109,5 +117,33 @@ public class apiControllersProduct {
 //        return new ResponseEntity(ProductInter.updateSelectedProduct(id, product),HttpStatus.OK);
 //    }
 
+    @GetMapping(value = "/products/A")
+    public ResponseEntity getProduct_A(){
+        try{
+            return new ResponseEntity<>(ProductInter.getProduct_A(),HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
+    @GetMapping(value = "/products/update/{id}/{name}")
+    public ResponseEntity updateName(@PathVariable("id") Integer id,@PathVariable(value = "name") String name){
+
+        if(id!=null){
+            return new ResponseEntity<>(ProductInter.updateName(id,name),HttpStatus.OK);
+        }
+        else {
+           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @DeleteMapping(value = "/products/softDelete/{id}")
+    public ResponseEntity softDelete(@PathVariable Integer id){
+        return new ResponseEntity<>(ProductInter.softDelete(id),HttpStatus.OK);
+    }
 
 }

@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.Models.Products;
-import com.example.demo.Services.productInter;
-import com.example.demo.Services.productService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -20,7 +17,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -40,7 +36,7 @@ class apiControllersProductTest {
     MockMvc mockMvc;
 
     @Mock
-    productInter ProductInter;
+    com.example.demo.Services.ProductInter ProductInter;
 
     @InjectMocks
     apiControllersProduct ApiControllersProduct;
@@ -61,7 +57,7 @@ class apiControllersProductTest {
         when(ProductInter.getProduct()).thenReturn(list);
 
         this.mockMvc
-                .perform(get("/products"))
+                .perform(get("/products").param("id","1"))
                 .andExpect(status().isOk())
                 .andDo(print());
 

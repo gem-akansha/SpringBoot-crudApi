@@ -38,7 +38,7 @@ class categoryServiceTest {
         //System.out.println(category.getCategoryId());
 
         when(CategoryRepo.findAll()).thenReturn(list);
-        assertEquals(list.size(),CategoryService.getCategory().size());
+        assertEquals(list.size(), CategoryService.getCategory().size());
 
     }
 
@@ -49,7 +49,7 @@ class categoryServiceTest {
 
         when(CategoryRepo.findById(any())).thenReturn(Optional.of(category));
 
-        assertEquals(category.getCategoryName(),CategoryService.getOneCategory(3).getCategoryName());
+        assertEquals(category.getCategoryName(), CategoryService.getOneCategory(3).getCategoryName());
     }
 //optional.of() contains not null object
     @Test
@@ -71,7 +71,8 @@ class categoryServiceTest {
         Category category = new Category(4,"Test","Hi Iam test");
           when(CategoryRepo.findById(any())).thenReturn(Optional.of(category));
           CategoryService.deleteCategory(category.getCategoryId());
-          verify(CategoryRepo,times(1)).deleteById(category.getCategoryId());
+           CategoryService.deleteCategory(category.getCategoryId());
+          verify(CategoryRepo,times(2)).deleteById(category.getCategoryId());
     }
     //deletebyid repo ko change krega....or deletebyid kitni bar call horha hai overall
 
