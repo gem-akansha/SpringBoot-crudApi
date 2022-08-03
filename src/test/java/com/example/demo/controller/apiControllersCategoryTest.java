@@ -1,13 +1,14 @@
 package com.example.demo.controller;
 
+import com.example.demo.DTO.CategoryDTO;
 import com.example.demo.Models.Category;
-import com.example.demo.Services.categoryInter;
-import com.example.demo.Services.categoryService;
 
+import com.example.demo.Services.CategoryInter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.MediaType;
 import org.junit.jupiter.api.*;
-import org.junit.runner.manipulation.Orderer;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +17,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.test.context.ContextConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,7 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@ContextConfiguration
+
 @ComponentScan(basePackages = "com.example.demo")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,14 +42,14 @@ class apiControllersCategoryTest {
     MockMvc mockMvc;
 
     @Mock
-    categoryInter CategoryInter;
+    CategoryInter categoryInter;
 
     @InjectMocks
-    apiControllersCategory ApiControllerCategory;
+    ApiControllersCategory apiControllersCategory;
 
     @BeforeEach
     public void setUp(){
-        mockMvc = MockMvcBuilders.standaloneSetup(ApiControllerCategory).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(apiControllersCategory).build();
     }
 
     @Test
@@ -63,10 +61,10 @@ class apiControllersCategoryTest {
         list.add(category);
         list.add(category1);
 
-        when(CategoryInter.getCategory()).thenReturn(list);
+        when(categoryInter.getCategory()).thenReturn(list);
         this.mockMvc
                 .perform(get("/category"))
-                .andExpect(status().isFound())
+                .andExpect(status().isOk())
                 .andDo(print());
 
 
@@ -74,9 +72,9 @@ class apiControllersCategoryTest {
 
     @Test
     @Order(2)
-    void getOneCategory() throws Exception {
+    void getCategoryById() throws Exception {
         Category category = new Category(1,"Controller test","Testing Controller");
-        when(CategoryInter.getOneCategory(any())).thenReturn(category);
+        when(categoryInter.getCategoryById(any())).thenReturn(category);
 
         this.mockMvc
                 .perform(get("/category/{id}",1))
@@ -92,21 +90,25 @@ class apiControllersCategoryTest {
     @Test
     @Order(3)
     void saveCategory() throws Exception {
-        Category category = new Category(1,"Controller test","Testing Controller");
-        when(CategoryInter.saveCategory(any())).thenReturn(category);
+        CategoryDTO categoryDTO = new CategoryDTO("Controller test","Testing Controller");
+        when(categoryInter.saveCategory(any())).thenReturn(categoryDTO);
+
+
 
         //ObjectMapper is used to convert java object into json object
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         //writeValueAsString is used to convert json object as string..
         //json object hi rhegA BUT AS STRING TREAT HOGA
-        String jsonBody = mapper.writeValueAsString(category);
+        String jsonBody = mapper.writeValueAsString(categoryDTO);
 
+        //String json =  "{\"categoryId\":1,\"categoryName\":\"Controller test\",\"categoryDescription\":\"Testing Controller\",\"createDate\":\"28-07-2022\",\"updateDate\":\"28-07-2022\",\"active\":true,\"deleted\":false}";
         this.mockMvc
                 .perform(post("/category")
                         .content(jsonBody)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath(".categoryId").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath(".categoryName").value("Controller test"))
                 .andExpect(MockMvcResultMatchers.jsonPath(".categoryDescription").value("Testing Controller"))
                 .andDo(print());
@@ -115,11 +117,13 @@ class apiControllersCategoryTest {
     @Test
     @Order(4)
     void updateCategory() throws Exception {
-        Category category = new Category(1,"Controller test","Testing Controller");
-        when(CategoryInter.updateCategory(any(),any())).thenReturn(category);
+        CategoryDTO categoryDTO = new CategoryDTO("Controller test","Testing Controller");
+        when(categoryInter.updateCategory(any(),any())).thenReturn(categoryDTO);
 
         ObjectMapper mapper = new ObjectMapper();
-        String jsonBody = mapper.writeValueAsString(category);
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        String jsonBody = mapper.writeValueAsString(categoryDTO);
         this.mockMvc
                 .perform(put("/category/{id}",1)
                         .content(jsonBody)
@@ -133,10 +137,9 @@ class apiControllersCategoryTest {
     @Test
     @Order(5)
     void deleteCategory() throws Exception {
-        Category category = new Category(1,"Controller test","Testing Controller");
-        when(CategoryInter.deleteCategory(any())).thenReturn("Category Deleted");
+        when(categoryInter.deleteCategory(any())).thenReturn("Category Deleted");
         this.mockMvc
-                .perform(delete("/category/{id}",1))
+                .perform(delete("/category/{id}",989))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

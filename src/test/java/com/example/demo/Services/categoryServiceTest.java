@@ -1,7 +1,7 @@
 package com.example.demo.Services;
 
+import com.example.demo.DTO.CategoryDTO;
 import com.example.demo.Models.Category;
-import com.example.demo.Repo.categoryRepo;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -22,10 +22,10 @@ import static org.mockito.Mockito.*;
 class categoryServiceTest {
 
     @Mock
-    categoryRepo CategoryRepo;
+    com.example.demo.Repo.CategoryRepo categoryRepo;
 
     @InjectMocks
-    categoryService CategoryService;
+    com.example.demo.Services.CategoryService categoryService;
 
     @Test
     @Order(1)
@@ -37,29 +37,30 @@ class categoryServiceTest {
         list.add(category1);
         //System.out.println(category.getCategoryId());
 
-        when(CategoryRepo.findAll()).thenReturn(list);
-        assertEquals(list.size(),CategoryService.getCategory().size());
+        when(categoryRepo.findAll()).thenReturn(list);
+        assertEquals(list.size(), categoryService.getCategory().size());
 
     }
 
     @Test
     @Order(2)
-    void getOneCategory() {
+    void getCategoryById() {
         Category category = new Category(3,"Test","Hi Iam test");
 
-        when(CategoryRepo.findById(any())).thenReturn(Optional.of(category));
+        when(categoryRepo.findById(any())).thenReturn(Optional.of(category));
 
-        assertEquals(category.getCategoryName(),CategoryService.getOneCategory(3).getCategoryName());
+        assertEquals(category.getCategoryName(), categoryService.getCategoryById(3).getCategoryName());
     }
 //optional.of() contains not null object
     @Test
     @Order(3)
     void updateCategory() {
+        CategoryDTO categoryDTO=new CategoryDTO("Test","Hi Iam test");
         Category category = new Category(4,"Test","Hi Iam test");
-        when(CategoryRepo.findById(any())).thenReturn(Optional.of(category));
-        when(CategoryRepo.save(any())).thenReturn(category);
-        Category actualCategory = CategoryService.updateCategory(4,category);
-        assertEquals(category, actualCategory);
+        when(categoryRepo.findById(any())).thenReturn(Optional.of(category));
+        when(categoryRepo.save(any())).thenReturn(category);
+        CategoryDTO categoryDTO1 = categoryService.updateCategory(4,categoryDTO);
+        assertEquals(category.getCategoryName(), categoryDTO1.getCategoryName());
 
     }
 
@@ -69,18 +70,20 @@ class categoryServiceTest {
     @Order(4)
     void deleteCategory() {
         Category category = new Category(4,"Test","Hi Iam test");
-          when(CategoryRepo.findById(any())).thenReturn(Optional.of(category));
-          CategoryService.deleteCategory(category.getCategoryId());
-          verify(CategoryRepo,times(1)).deleteById(category.getCategoryId());
+          when(categoryRepo.findById(any())).thenReturn(Optional.of(category));
+          categoryService.deleteCategory(category.getCategoryId());
+           categoryService.deleteCategory(category.getCategoryId());
+          verify(categoryRepo,times(2)).deleteById(category.getCategoryId());
     }
     //deletebyid repo ko change krega....or deletebyid kitni bar call horha hai overall
 
     @Test
     @Order(5)
     void saveCategory() {
-        Category category = new Category(5,"Test","Hi Iam test");
-        when(CategoryRepo.save(any())).thenReturn(category);
-        Category category1 = CategoryService.saveCategory(category);
-        assertEquals(category,category1);
+        CategoryDTO categoryDTO = new CategoryDTO("Test","Hi Iam test");
+        Category category = new Category(1,"Test","Hi Iam test");
+        when(categoryRepo.save(any())).thenReturn(category);
+        CategoryDTO categoryDTO1 = categoryService.saveCategory(categoryDTO);
+        assertEquals(category.getCategoryName(),categoryDTO1.getCategoryName());
     }
 }

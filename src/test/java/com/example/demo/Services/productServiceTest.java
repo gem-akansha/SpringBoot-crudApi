@@ -1,7 +1,8 @@
 package com.example.demo.Services;
 
+import com.example.demo.DTO.ProductDTO;
 import com.example.demo.Models.Products;
-import com.example.demo.Repo.productRepo;
+import com.example.demo.Repo.ProductRepo;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -21,10 +22,10 @@ import static org.mockito.Mockito.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class productServiceTest {
     @Mock
-    productRepo ProductRepo;
+    ProductRepo productRepo;
 
     @InjectMocks
-    productService ProductService;
+    ProductService productService;
 
     @Test
     @Order(1)
@@ -34,35 +35,39 @@ class productServiceTest {
         Products product1 = new Products(2,"Product Test1","Testing Product1",780,14);
         list.add(product);
         list.add(product1);
-        when(ProductRepo.findAll()).thenReturn(list);
-        assertEquals(2,ProductService.getProduct().size());
+        when(productRepo.findAll()).thenReturn(list);
+        assertEquals(2, productService.getProduct().size());
     }
 
     @Test
     @Order(2)
     void getOneProduct() {
         Products product = new Products(1,"Product Test","Testing Product",780,12);
-        when(ProductRepo.findById(any())).thenReturn(Optional.of(product));
-        assertEquals(product.getProductName(),ProductService.getOneProduct(1).getProductName());
+        when(productRepo.findById(any())).thenReturn(Optional.of(product));
+        assertEquals(product.getProductName(), productService.getProductById(1).getProductName());
     }
 
     @Test
     @Order(3)
     void saveProduct() {
-        Products product = new Products(1,"Product Test","Testing Product",780,12);
-        ProductService.saveProduct(product);
-        verify(ProductRepo,times(1)).save(product);
+        ProductDTO productDTO = new ProductDTO("Product Test", "Testing Product", 780, 12);
+        Products product = new Products(1, "Product Test", "Testing Product", 780, 12);
+        when(productRepo.save(any())).thenReturn(product);
+        ProductDTO productDTO1 = productService.saveProduct(productDTO);
+        assertEquals(productDTO1.getProductName(), product.getProductName());
+        //verify(productRepo,times(1)).save(product);
     }
 
     @Test
     @Order(4)
     void updateProduct() {
+        ProductDTO productDTO =new ProductDTO("Product Test","Testing Product",780,12);
         Products product = new Products(1,"Product Test","Testing Product",780,12);
-        when(ProductRepo.findById(any())).thenReturn(Optional.of(product));
-        when(ProductRepo.save(any())).thenReturn(product);
-        Products actualProduct = ProductService.updateProduct(1,product);
-        verify(ProductRepo,times(2)).findById(1);
-        verify(ProductRepo,times(1)).save(product);
+        when(productRepo.findById(any())).thenReturn(Optional.of(product));
+        when(productRepo.save(any())).thenReturn(product);
+        ProductDTO productDTO1 = productService.updateProduct(1,productDTO);
+        verify(productRepo,times(2)).findById(1);
+        verify(productRepo,times(1)).save(product);
 
     }
 
@@ -70,9 +75,9 @@ class productServiceTest {
     @Order(5)
     void deleteProduct() {
         Products product = new Products(1,"Product Test","Testing Product",780,12);
-        when(ProductRepo.findById(any())).thenReturn(Optional.of(product));
-        ProductService.deleteProduct(1);
-        verify(ProductRepo,times(1)).delete(product);
+        when(productRepo.findById(any())).thenReturn(Optional.of(product));
+        productService.deleteProduct(1);
+        verify(productRepo,times(1)).delete(product);
 
     }
 }
