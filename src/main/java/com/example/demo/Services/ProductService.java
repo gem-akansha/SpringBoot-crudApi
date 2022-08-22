@@ -1,16 +1,18 @@
 package com.example.demo.Services;
 
+import com.example.demo.DTO.ProductDTO;
 import com.example.demo.Exception.IdNotFoundException;
 import com.example.demo.Models.Products;
-import com.example.demo.Repo.productRepo;
-import com.example.demo.controller.apiControllersProduct;
+
+import com.example.demo.Repo.ProductRepo;
+import com.example.demo.controller.ApiControllersProduct;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 
@@ -18,155 +20,180 @@ import java.util.List;
 public class ProductService implements ProductInter {
 
     @Autowired
-    public productRepo ProductRepo;
+    ProductRepo productRepo;
 
-    Logger log = LoggerFactory.getLogger(apiControllersProduct.class);
 
+    Logger log = LoggerFactory.getLogger(ApiControllersProduct.class);
+
+    /**
+     *
+     * @return
+     */
     @Override
 
     public List<Products> getProduct() {
             log.info("Retrieving all Products");
-            return ProductRepo.findAll();
+            return productRepo.findAll();
     }
 
+
+    /**
+     *
+     * @param id
+     * @return
+     * @throws IdNotFoundException
+     */
     @Override
-    public Products getOneProduct(Integer id) throws IdNotFoundException {
+    public Products getProductById(Integer id) throws IdNotFoundException {
         Products product;
-        if(ProductRepo.findById(id).isEmpty()){
+        if(productRepo.findById(id).isEmpty()){
             log.error("Id not found exception");
             throw new IdNotFoundException();
         }
         else {
             log.info("Retrieving product for given id");
-            product = ProductRepo.findById(id).get();
+            product = productRepo.findById(id).get();
         }
         return product;
     }
 
-    @Override
-    public String saveProduct(Products product) {
 
-        ProductRepo.save(product);
+    /**
+     *
+     * @param productDTO
+     * @return
+     */
+    @Override
+    public ProductDTO saveProduct(ProductDTO productDTO) {
+        Products product = convertDtoToEntity(productDTO);
+        Products savedProduct = productRepo.save(product);
+        ProductDTO savedProductDto = convertEntityToDto(savedProduct);
         log.info("Adding new product to table");
-        return "Saved.....";
+        return savedProductDto;
     }
 
-    @Override
-    public Products updateProduct(Integer id, Products product) throws IdNotFoundException{
 
-        if( ProductRepo.findById(id).isEmpty()){
+    /**
+     *
+     * @param id
+     * @param productDTO
+     * @return
+     * @throws IdNotFoundException
+     */
+    @Override
+    public ProductDTO updateProduct(Integer id, ProductDTO productDTO) throws IdNotFoundException{
+
+        if( productRepo.findById(id).isEmpty()){
             log.error("Cannot update product details... product doesnt exist with given id",id);
             throw new IdNotFoundException();
         }
         else{
-            Products updatedProduct = ProductRepo.findById(id).get();
-           // updatedProduct.setCategoryId(product.getCategoryId());
-            updatedProduct.setProductName(product.getProductName());
-            updatedProduct.setProductDescription(product.getProductDescription());
-            updatedProduct.setPrice(product.getPrice());
-            //updatedProduct.setCreateDate(product.getCreateDate());
-
+            Products updatedProduct = productRepo.findById(id).get();
+            updatedProduct.setProductName(productDTO.getProductName());
+            updatedProduct.setProductDescription(productDTO.getProductDescription());
+            updatedProduct.setPrice(productDTO.getPrice());
+            updatedProduct.setCategoryId(productDTO.getCategoryId());
             updatedProduct.setUpdateDate(LocalDate.now()
-                  //  new Date(System.currentTimeMillis())
             );
-            //updatedProduct.setUpdateDate(product.getUpdateDate());
-            //updatedProduct.setActive(product.getActive());
-            //updatedProduct.setDeleted(product.getDeleted());
-            ProductRepo.save(updatedProduct);
+            productRepo.save(updatedProduct);
             log.info("Product Updated");
-            return updatedProduct;
+            ProductDTO updatedProductDto = convertEntityToDto(updatedProduct);
+            return updatedProductDto;
         }
-
-
-
-
-
-//        public Product updateProduct(Product product, int productId) throws ResourceNotFoundException {
-//            Product update;
-//            if (productDao.findById(productId).isPresent()) {
-//                update = productDao.findById(productId).get();
-//                update.setProductName(product.getProductName());
-//                update.setProductDescription(product.getProductDescription());
-//                update.setPrice(product.getPrice());
-//                // update.setCreateDate(product.getCreateDate());updateDate=new Date(System.currentTimeMillis());
-//                Date date = new Date(System.currentTimeMillis());
-//                update.setUpdateDate(date);
-//                update.setActive(product.isActive());
-//                update.setDeleted(product.isDeleted());
-//                productDao.save(update);
-//            } else {
-//                throw new ResourceNotFoundException();
-//            }
-//            return update;
-//        }
     }
 
 
+    /**
+     *
+     * @param id
+     * @return
+     * @throws IdNotFoundException
+     */
     @Override
     public String deleteProduct(Integer id) throws IdNotFoundException {
-        if(ProductRepo.findById(id).isEmpty()){
+        if(productRepo.findById(id).isEmpty()){
             log.error("Id not found exception");
             throw new IdNotFoundException();
         }
         else {
-            Products deleteProduct= ProductRepo.findById(id).get();
-            ProductRepo.delete(deleteProduct);
+            Products deleteProduct= productRepo.findById(id).get();
+            productRepo.delete(deleteProduct);
             log.info("Product Deleted");
-
-            //ProductRepo.deleteById(id);
             return"Product Deleted";
         }
 
     }
 
+
+    /**
+     *
+     * @return
+     */
     @Override
     public List<Products> getProduct_A() {
-        return ProductRepo.getProducts_A();
+        return productRepo.getProducts_A();
     }
 
+
+    /**
+     *
+     * @param id
+     * @param name
+     * @return
+     */
     @Override
     public Products updateName(Integer id,String name) {
-        if(ProductRepo.findById(id).isEmpty()){
+        if(productRepo.findById(id).isEmpty()){
             log.error("Id not found exception");
             throw new IdNotFoundException();
         }
         else {
-
-            log.info("tewst log");
-             ProductRepo.update(name,id);
-//            ProductRepo.demo(id);
-             log.info("Here");
-             Products products = ProductRepo.findById(id).get();
-            System.out.println(products.getProductName());
+            log.info("Updating name of product with id:{}",id);
+             productRepo.update(name,id);
+             Products products = productRepo.findById(id).get();
              return products;
         }
     }
 
+
+    /**
+     *
+     * @param id
+     * @return
+     */
     @Override
     public String softDelete(Integer id) {
-        ProductRepo.soft_delete(id);
+        productRepo.soft_delete(id);
         return "Deleted";
     }
 
-//    @Override
-//    public String updateSelectedProduct(Integer id, Products product) throws IdNotFoundException{
-//        if(ProductRepo.findById(id).isEmpty()){
-//            throw new IdNotFoundException();
-//        }
-//        else {
-//            Products UpdateSelectedProduct = ProductRepo.findById(id).get();
-//            UpdateSelectedProduct.setProductName(product.getProductName());
-//            UpdateSelectedProduct.setProductDescription(product.getProductDescription());
-//            UpdateSelectedProduct.setPrice(product.getPrice());
-//            //updatedProduct.setCreateDate(product.getCreateDate());
-//
-//            UpdateSelectedProduct.setUpdateDate(new Date(System.currentTimeMillis()));
-//            //updatedProduct.setUpdateDate(product.getUpdateDate());
-//            UpdateSelectedProduct.setActive(product.getActive());
-//            UpdateSelectedProduct.setDeleted(product.getDeleted());
-//            ProductRepo.save(UpdateSelectedProduct);
-//            return "Updated Successfully";
-//        }
-//
-//    }
+
+    /**
+     *
+     * @param products
+     * @return
+     */
+    public ProductDTO convertEntityToDto(Products products){
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setProductName(products.getProductName());
+        productDTO.setProductDescription(products.getProductDescription());
+        productDTO.setPrice(products.getPrice());
+        productDTO.setCategoryId(products.getCategoryId());
+        return productDTO;
+    }
+
+
+    /**
+     *
+     * @param productDTO
+     * @return
+     */
+    public Products convertDtoToEntity(ProductDTO productDTO){
+        Products products =new Products();
+        products.setProductName(productDTO.getProductName());
+        products.setProductDescription(productDTO.getProductDescription());
+        products.setPrice(productDTO.getPrice());
+        products.setCategoryId(productDTO.getCategoryId());
+        return products;
+    }
 }

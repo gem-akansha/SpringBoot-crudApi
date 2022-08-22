@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 
-public interface productRepo extends JpaRepository<Products,Integer> {
+public interface ProductRepo extends JpaRepository<Products,Integer> {
     @Query(value="select * from Products where product_name like 'A%' ",nativeQuery = true)
     public List<Products> getProducts_A();
 
@@ -22,8 +22,6 @@ public interface productRepo extends JpaRepository<Products,Integer> {
     @Query(value = "update products set product_name = :name where product_id = :id ",nativeQuery = true)
     public void update(@Param(value = "name") String name, @Param(value = "id") Integer id);
 
-    @Query(value = "select product_name from Products where product_id = :id",nativeQuery = true)
-    public String demo(@Param("id") Integer id);
     @Modifying
     @Transactional
     @Query(value = "update Products set is_deleted = true where product_id = :id ",nativeQuery = true)

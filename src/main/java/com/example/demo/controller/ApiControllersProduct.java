@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.DTO.ProductDTO;
 import com.example.demo.Models.Products;
-//import io.swagger.annotations.Api;
+import com.example.demo.Services.ProductInter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -17,27 +18,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.*;
-//import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-
-
 @RestController
-//@EnableSwagger2
-//@Api(tags = {"Product Service"}, description = "test")
 @Tag(name = "Product Service", description = "Crud on product table")
-
-public class apiControllersProduct {
-
+public class ApiControllersProduct {
     @Autowired
-    private com.example.demo.Services.ProductInter ProductInter;
-
-    Logger log = LoggerFactory.getLogger(apiControllersProduct.class);
-
-//    @Autowired
-//    private categoryRepo cr;
+    ProductInter productInter;
+    Logger log = LoggerFactory.getLogger(ApiControllersProduct.class);
 
 
+    /**
+     *
+     * @return
+     */
     @GetMapping(value = "/")
     @Operation(summary = "Welocme", description = "Welocme Page")
     public String getPage(){
@@ -47,103 +39,113 @@ public class apiControllersProduct {
     }
 
 
-//    @GetMapping(value = "/products")
-//    public List<Products> getProduct(){
-//       // return ProductRepo.findAll();
-//        return ProductInter.getProduct();
-//    }
-//
-//    @GetMapping(value = "/products/{id}")
-//    public Products getOneProduct(@PathVariable Integer id){
-//        return ProductInter.getOneProduct(id);
-//    }
-
-
-
-    @GetMapping(value = "/products")
+    /**
+     *
+     * @param id
+     * @return
+     */
+     @GetMapping(value = "/products")
     @Operation(summary = "Get Products", description = "Get list of all products")
     public ResponseEntity<?> mergeFindByIdAndFindAll(@RequestParam(required = false) Integer id){
         if(id!=null){
-//         try{
-//            return new ResponseEntity<>(ProductInter.getOneProduct(id), HttpStatus.OK);
-//        }
-//        catch (IdNotFoundException e) {
-//            return new ResponseEntity<>("NOT found",HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-
-                return new ResponseEntity<>(ProductInter.getOneProduct(id), HttpStatus.FOUND);
-
-
+                log.info("Getting product of given id");
+                return new ResponseEntity<>(productInter.getProductById(id), HttpStatus.FOUND);
         }
         else {
-            return new ResponseEntity<>(ProductInter.getProduct(), HttpStatus.OK);
+            log.info("Getting list of all products");
+            return new ResponseEntity<>(productInter.getProduct(), HttpStatus.OK);
         }
 
-
-
-//
-
     }
 
 
-
+    /**
+     *
+     * @param productDTO
+     * @return
+     */
     @PostMapping(value = "/products")
     @Operation(summary = "Save Product", description = "Save product")
-    public ResponseEntity saveProduct(@RequestBody Products product){
+    public ResponseEntity saveProduct(@RequestBody ProductDTO productDTO){
        try{
-           return new ResponseEntity<>(ProductInter.saveProduct(product),HttpStatus.OK);
+           log.info("Adding product into db");
+           return new ResponseEntity<>(productInter.saveProduct(productDTO),HttpStatus.OK);
        }
        catch (Exception e){
-           return new ResponseEntity<>(HttpStatus.CONFLICT);
+           log.error("Exception occured:{}",e.getMessage());
+           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
        }
     }
 
+
+    /**
+     *
+     * @param id
+     * @param productDTO
+     * @return
+     */
     @PutMapping(value = "/products/{id}")
     @Operation(summary = "Update Product", description =" Update product of given id")
-    public ResponseEntity updateProduct(@PathVariable Integer id, @RequestBody Products product){
-        return new ResponseEntity(ProductInter.updateProduct(id,product),HttpStatus.OK);
+    public ResponseEntity updateProduct(@PathVariable Integer id, @RequestBody ProductDTO productDTO){
+        return new ResponseEntity(productInter.updateProduct(id,productDTO),HttpStatus.OK);
     }
 
+
+    /**
+     *
+     * @param id
+     * @return
+     */
 
     @DeleteMapping(value = "/products/{id}")
     @Operation(summary = "Delete Product", description = "delete product of given id")
     public ResponseEntity deleteProduct(@PathVariable Integer id){
-        return new ResponseEntity(ProductInter.deleteProduct(id),HttpStatus.OK) ;
+        return new ResponseEntity(productInter.deleteProduct(id),HttpStatus.OK) ;
     }
 
 
-//    @PatchMapping(value = "/products/{id}")
-//    public ResponseEntity updateSelectedProduct(@PathVariable Integer id,@RequestBody Products product){
-//        return new ResponseEntity(ProductInter.updateSelectedProduct(id, product),HttpStatus.OK);
-//    }
-
+    /**
+     *Fetch Product details of all products whose name starts with "A"
+     * @return
+     */
     @GetMapping(value = "/products/A")
     public ResponseEntity getProduct_A(){
         try{
-            return new ResponseEntity<>(ProductInter.getProduct_A(),HttpStatus.OK);
+            return new ResponseEntity<>(productInter.getProduct_A(),HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            log.error("Exception occured:{}",e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
 
 
-
+    /**
+     *
+     * @param id
+     * @param name
+     * @return
+     */
     @GetMapping(value = "/products/update/{id}/{name}")
     public ResponseEntity updateName(@PathVariable("id") Integer id,@PathVariable(value = "name") String name){
 
         if(id!=null){
-            return new ResponseEntity<>(ProductInter.updateName(id,name),HttpStatus.OK);
+            return new ResponseEntity<>(productInter.updateName(id,name),HttpStatus.OK);
         }
         else {
-           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+           return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @DeleteMapping(value = "/products/softDelete/{id}")
     public ResponseEntity softDelete(@PathVariable Integer id){
-        return new ResponseEntity<>(ProductInter.softDelete(id),HttpStatus.OK);
+        return new ResponseEntity<>(productInter.softDelete(id),HttpStatus.OK);
     }
 
 }
