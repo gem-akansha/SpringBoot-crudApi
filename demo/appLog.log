@@ -7542,3 +7542,34 @@ java.net.SocketException: Connection reset
 2022-10-09 13:26:34,773 [INFO] org.springframework.web.servlet.DispatcherServlet  Completed initialization in 3 ms
 2022-10-09 13:26:34,850 [INFO] com.example.demo.controller.ApiControllersCategory  Getting category by id
 2022-10-09 13:26:36,416 [INFO] com.example.demo.controller.ApiControllersProduct  Retrieving category for given id
+2022-10-09 13:37:11,942 [INFO] io.lettuce.core.protocol.CommandHandler  null Unexpected exception during request: java.net.SocketException: Connection reset
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.SocketChannelImpl.throwConnectionReset(SocketChannelImpl.java:345)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:376)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:258)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:722)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:584)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:832)
+2022-10-09 13:37:12,043 [INFO] io.lettuce.core.protocol.ConnectionWatchdog  Reconnecting, last destination was /127.0.0.1:6379
+2022-10-09 13:37:14,091 [WARN] io.lettuce.core.protocol.ConnectionWatchdog  Cannot reconnect to [127.0.0.1/<unresolved>:6379]: Connection refused: no further information: /127.0.0.1:6379
+2022-10-09 13:37:18,344 [INFO] io.lettuce.core.protocol.ConnectionWatchdog  Reconnecting, last destination was 127.0.0.1/<unresolved>:6379
+2022-10-09 13:37:20,398 [WARN] io.lettuce.core.protocol.ConnectionWatchdog  Cannot reconnect to [127.0.0.1/<unresolved>:6379]: Connection refused: no further information: /127.0.0.1:6379
+2022-10-09 13:37:24,738 [INFO] io.lettuce.core.protocol.ConnectionWatchdog  Reconnecting, last destination was 127.0.0.1/<unresolved>:6379
+2022-10-09 13:37:26,801 [WARN] io.lettuce.core.protocol.ConnectionWatchdog  Cannot reconnect to [127.0.0.1/<unresolved>:6379]: Connection refused: no further information: /127.0.0.1:6379
+2022-10-09 13:37:31,936 [INFO] io.lettuce.core.protocol.ConnectionWatchdog  Reconnecting, last destination was 127.0.0.1/<unresolved>:6379
+2022-10-09 13:37:33,954 [WARN] io.lettuce.core.protocol.ConnectionWatchdog  Cannot reconnect to [127.0.0.1/<unresolved>:6379]: Connection refused: no further information: /127.0.0.1:6379
+2022-10-09 13:37:39,141 [INFO] io.lettuce.core.protocol.ConnectionWatchdog  Reconnecting, last destination was 127.0.0.1/<unresolved>:6379
+2022-10-09 13:37:41,189 [WARN] io.lettuce.core.protocol.ConnectionWatchdog  Cannot reconnect to [127.0.0.1/<unresolved>:6379]: Connection refused: no further information: /127.0.0.1:6379
+2022-10-09 13:37:45,337 [INFO] io.lettuce.core.protocol.ConnectionWatchdog  Reconnecting, last destination was 127.0.0.1/<unresolved>:6379
+2022-10-09 13:37:47,146 [INFO] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean  Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-10-09 13:37:47,149 [WARN] io.lettuce.core.protocol.ConnectionWatchdog  Cannot reconnect to [127.0.0.1/<unresolved>:6379]: java.util.concurrent.CancellationException
+2022-10-09 13:37:47,290 [INFO] com.zaxxer.hikari.HikariDataSource  HikariPool-1 - Shutdown initiated...
+2022-10-09 13:37:47,307 [INFO] com.zaxxer.hikari.HikariDataSource  HikariPool-1 - Shutdown completed.
