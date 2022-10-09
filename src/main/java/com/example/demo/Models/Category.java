@@ -1,5 +1,6 @@
 package com.example.demo.Models;
 
+import com.example.demo.DTO.CategoryDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Column;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Getter
@@ -20,7 +22,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 
-public class Category {
+public class Category implements Serializable {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryId;
@@ -54,4 +58,6 @@ public class Category {
         this.categoryName = categoryName;
         this.categoryDescription = categoryDescription;
     }
+
+
 }

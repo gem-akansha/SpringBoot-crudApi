@@ -2,6 +2,7 @@ package com.example.demo.Services;
 
 import com.example.demo.DTO.CategoryDTO;
 import com.example.demo.Models.Category;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -10,7 +11,8 @@ public interface CategoryInter {
 
     public CategoryDTO saveCategory(CategoryDTO category);
 
-    public Category getCategoryById(Integer id);
+
+    public CategoryDTO getCategoryById(Integer id);
 
     public CategoryDTO updateCategory(Integer id,CategoryDTO categoryDTO );
 

@@ -8,6 +8,9 @@ import com.example.demo.controller.ApiControllersProduct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,6 +27,7 @@ public class CategoryService implements CategoryInter {
      * @return
      */
     @Override
+    @Cacheable(value = "category")
     public List<Category> getCategory() {
         log.info("Retrieving all Category");
         return categoryRepo.findAll();
@@ -37,7 +41,8 @@ public class CategoryService implements CategoryInter {
      * @throws IdNotFoundException
      */
     @Override
-    public Category getCategoryById(Integer id) throws IdNotFoundException {
+    @Cacheable(value = "category",key="#id")
+    public CategoryDTO getCategoryById(Integer id) throws IdNotFoundException {
         Category category =null;
 
         if(categoryRepo.findById(id).isEmpty()){
@@ -47,7 +52,8 @@ public class CategoryService implements CategoryInter {
         else{
              log.info("Retrieving category for given id");
              category = categoryRepo.findById(id).get();
-             return category;
+             CategoryDTO categoryDTO = convertEntityToDto(category);
+             return categoryDTO;
         }
 
     }
@@ -61,6 +67,7 @@ public class CategoryService implements CategoryInter {
      * @throws IdNotFoundException
      */
     @Override
+    @CachePut(value = "category")
     public CategoryDTO updateCategory(Integer id, CategoryDTO categoryDTO) throws IdNotFoundException {
         if(categoryRepo.findById(id).isEmpty()){
             log.error("Id not found exception");
@@ -87,6 +94,7 @@ public class CategoryService implements CategoryInter {
      * @throws IdNotFoundException
      */
     @Override
+    @CacheEvict(value = "category", allEntries = true)
     public String deleteCategory(Integer id) throws IdNotFoundException {
         if(categoryRepo.findById(id).isEmpty()){
             log.error("Id not found exception");
@@ -108,6 +116,7 @@ public class CategoryService implements CategoryInter {
      * @return
      */
     @Override
+    @CacheEvict(value = "category", allEntries = true)
     public CategoryDTO saveCategory(CategoryDTO categoryDTO) {
         Category category = convertDtoToEntity(categoryDTO);
         Category savedCategory = categoryRepo.save(category);

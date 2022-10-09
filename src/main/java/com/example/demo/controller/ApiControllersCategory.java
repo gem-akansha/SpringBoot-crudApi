@@ -6,6 +6,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Slf4j
 @Tag(name = "Category Service", description = "Crud on category table")
 @RestController
-
+//@EnableCaching
 public class ApiControllersCategory {
     @Autowired
     CategoryInter categoryInter;
@@ -33,6 +37,7 @@ public class ApiControllersCategory {
     public ResponseEntity<?> getCategory(){
         try{
             log.info("Getting List of all category");
+            System.out.println("Getting from db");
             return new ResponseEntity<>(categoryInter.getCategory(),HttpStatus.OK);
         }
         catch (Exception e){
@@ -50,8 +55,13 @@ public class ApiControllersCategory {
     @GetMapping(value = "/category/{id}")
     @Operation(summary = "Get category by id", description = "Get category of given id")
     public ResponseEntity getCategoryById(@PathVariable Integer id){
-        log.info("Getting category by id");
-        return new ResponseEntity(categoryInter.getCategoryById(id), HttpStatus.OK);
+        try {
+            log.info("Getting category by id");
+            return new ResponseEntity(categoryInter.getCategoryById(id), HttpStatus.OK);
+        } catch (Exception e){
+            log.error("Exception occured: {}",e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
@@ -83,8 +93,13 @@ public class ApiControllersCategory {
     @PutMapping(value = "/category/{id}")
     @Operation(summary = "Update Category", description = "Update category of given id")
     public ResponseEntity updateCategory(@PathVariable Integer id,@RequestBody CategoryDTO categoryDTO ){
-        log.info("Updating category of given id");
-        return new ResponseEntity<>(categoryInter.updateCategory(id,categoryDTO),HttpStatus.OK);
+        try {
+            log.info("Updating category of given id");
+            return new ResponseEntity<>(categoryInter.updateCategory(id, categoryDTO), HttpStatus.OK);
+        } catch (Exception e){
+            log.error("Exception occured: {}",e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
