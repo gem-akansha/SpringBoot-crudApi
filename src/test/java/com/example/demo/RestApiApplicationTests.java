@@ -11,6 +11,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -78,8 +79,35 @@ class RestApiApplicationTests {
 	@Order(3)
 	@Test
 	void testGetCategoryById(){
-
+		ResponseEntity Entity = apiControllersCategory.getCategoryById(1);
+		CategoryDTO categoryDTO = (CategoryDTO) Entity.getBody();
+		//System.out.println(categoryDTO.getCategoryName());
+		assertEquals("Laptop",categoryDTO.getCategoryName());
 	}
 
+
+	@Order(4)
+	@Test
+	void testUpdateCategory(){
+		CategoryDTO categoryDTO = new CategoryDTO("AC","Voltas");
+		ResponseEntity Entity =apiControllersCategory.updateCategory(1,categoryDTO);
+		CategoryDTO categoryDTO1 = (CategoryDTO) Entity.getBody();
+		//System.out.println(categoryDTO1.getCategoryName());
+		assertEquals("AC",categoryDTO1.getCategoryName());
+	}
+
+	@Order(5)
+	@Test
+	void testDeleteCategory(){
+		ResponseEntity Entity = apiControllersCategory.deleteCategory(1);
+		String str = (String) Entity.getBody();
+		assertEquals("Category Deleted",str);
+		assertEquals(HttpStatus.OK,Entity.getStatusCode());
+
+		//verifyning whether category deleted or not
+		ResponseEntity Entity1 = apiControllersCategory.getCategoryById(1);
+		String str1 = (String) Entity1.getBody();
+		assertEquals("Id doesn't exist",str1);
+	}
 
 }
