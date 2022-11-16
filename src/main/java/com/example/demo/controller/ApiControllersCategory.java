@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Slf4j
 @Tag(name = "Category Service", description = "Crud on category table")
 @RestController
-//@EnableCaching
 public class ApiControllersCategory {
     @Autowired
     CategoryInter categoryInter;
@@ -60,7 +59,7 @@ public class ApiControllersCategory {
             return new ResponseEntity(categoryInter.getCategoryById(id), HttpStatus.OK);
         } catch (Exception e){
             log.error("Exception occured: {}",e.getMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Id doesn't exist",HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
